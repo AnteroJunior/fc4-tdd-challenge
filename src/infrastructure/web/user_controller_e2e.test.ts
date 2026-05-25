@@ -31,6 +31,9 @@ describe("UserController", () => {
       dataSource.getRepository(UserEntity),
     );
 
+    const userRepo = dataSource.getRepository(UserEntity);
+    userRepo.clear();
+
     userService = new UserService(userRepository);
     userController = new UserController(userService);
 

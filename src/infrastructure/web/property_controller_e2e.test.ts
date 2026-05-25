@@ -35,6 +35,9 @@ describe("PropertyController", () => {
       dataSource.getRepository(PropertyEntity),
     );
 
+    const propertyRepo = dataSource.getRepository(PropertyEntity);
+    propertyRepo.clear();
+
     propertyService = new PropertyService(propertyRepository);
     propertyController = new PropertyController(propertyService);
 
