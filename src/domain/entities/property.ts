@@ -8,7 +8,7 @@ export class Property {
     private name: string,
     private description: string,
     private maxGuests: number,
-    private basePricePerNight: number
+    private basePricePerNight: number,
   ) {
     if (!name) {
       throw new Error("O nome é obrigatório");
@@ -16,6 +16,11 @@ export class Property {
     if (maxGuests <= 0) {
       throw new Error("O número máximo de hóspedes deve ser maior que zero");
     }
+
+    if (basePricePerNight < 0 || basePricePerNight === undefined) {
+      throw new Error("O preço base por noite é obrigatório");
+    }
+
     this.id = id;
     this.name = name;
     this.description = description;
@@ -46,7 +51,7 @@ export class Property {
   validateGuestCount(guestCount: number): void {
     if (guestCount > this.maxGuests) {
       throw new Error(
-        `Número máximo de hóspedes excedido. Máximo permitido: ${this.maxGuests}.`
+        `Número máximo de hóspedes excedido. Máximo permitido: ${this.maxGuests}.`,
       );
     }
   }
@@ -66,7 +71,7 @@ export class Property {
     return !this.bookings.some(
       (booking) =>
         booking.getStatus() === "CONFIRMED" &&
-        booking.getDateRange().overlaps(dateRange)
+        booking.getDateRange().overlaps(dateRange),
     );
   }
 
