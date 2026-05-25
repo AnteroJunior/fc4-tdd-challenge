@@ -19,11 +19,11 @@ describe("BookingService", () => {
     const mockUserRepositoy = {} as any;
 
     mockPropertyService = new PropertyService(
-      mockPropertyRepositoy
+      mockPropertyRepositoy,
     ) as jest.Mocked<PropertyService>;
 
     mockUserService = new UserService(
-      mockUserRepositoy
+      mockUserRepositoy,
     ) as jest.Mocked<UserService>;
 
     fakeBookingRepository = new FakeBookingRepository();
@@ -31,7 +31,7 @@ describe("BookingService", () => {
     bookingService = new BookingService(
       fakeBookingRepository,
       mockPropertyService,
-      mockUserService
+      mockUserService,
     );
   });
 
@@ -82,7 +82,7 @@ describe("BookingService", () => {
     };
 
     await expect(bookingService.createBooking(bookingDTO)).rejects.toThrow(
-      "Propriedade não encontrada."
+      "Propriedade não encontrada.",
     );
   });
 
@@ -103,7 +103,7 @@ describe("BookingService", () => {
     };
 
     await expect(bookingService.createBooking(bookingDTO)).rejects.toThrow(
-      "Usuário não encontrado."
+      "Usuário não encontrado.",
     );
   });
 
@@ -136,12 +136,12 @@ describe("BookingService", () => {
     mockProperty.isAvailable.mockReturnValue(false);
     mockProperty.addBooking.mockImplementationOnce(() => {
       throw new Error(
-        "A propriedade não está disponível para o período selecionado."
+        "A propriedade não está disponível para o período selecionado.",
       );
     });
 
     await expect(bookingService.createBooking(bookingDTO)).rejects.toThrow(
-      "A propriedade não está disponível para o período selecionado."
+      "A propriedade não está disponível para o período selecionado.",
     );
   });
 
@@ -176,7 +176,7 @@ describe("BookingService", () => {
     await bookingService.cancelBooking(booking.getId());
 
     const canceledBooking = await fakeBookingRepository.findById(
-      booking.getId()
+      booking.getId(),
     );
 
     expect(canceledBooking?.getStatus()).toBe("CANCELLED");
@@ -189,7 +189,14 @@ describe("BookingService", () => {
     const bookingId = "invalid-id";
 
     await expect(bookingService.cancelBooking(bookingId)).rejects.toThrow(
-      "Reserva não encontrada."
+      "Reserva não encontrada.",
+    );
+  });
+
+  it("deve retornar erro ao tentar cancelar uma reserva que não existe", () => {
+    const bookingId = "non-existent-id";
+    expect(bookingService.cancelBooking(bookingId)).rejects.toThrow(
+      "Reserva não encontrada.",
     );
   });
 });
